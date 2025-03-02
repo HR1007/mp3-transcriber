@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 德語辨識助手</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <div class="container">
+
+        <h1>🐧 MP3 德語辨識助手</h1>
+
+        <label for="fileInput" class="file-upload">
+            🎵 Choose File
+        </label>
+        <input type="file" id="fileInput" accept="audio/mp3">
+
+        <button class="upload-btn" onclick="uploadFile()">📤 上傳並辨識</button>
+        
+        <p id="status"></p>
+
+        <div id="result">
+        <!-- 提取文字 -->
+        <div class="title">📝 提取文字</div>
+        <div id="transcription" class="box"></div>
+
+        <!-- 德文翻譯 -->
+        <div class="title">📖 德文翻譯</div>
+        <div id="translation" class="box"></div>
+        </div>
+    </div>
+
+    <script>
+        function uploadFile(){
+            let fileInput = document.getElementById("fileInput"); 
+            if (!fileInput.files.length){  
+                alert("請選擇 MP3 檔案！");
+                return;
+            }
+    
+            let formData = new FormData();
+            formData.append("file", fileInput.files[0]); 
+    
+            document.getElementById("status").innerHTML = "🥸 辨識中......";
+            document.getElementById("transcription").innerText = "";
+            document.getElementById("translation").innerText = "";
+    
+            axios.post("/upload", formData)
+                .then(response => {  
+                    console.log("API 回應:", response.data);  // 測試 API 是否有正確回應
+                    document.getElementById("status").innerHTML = "🥳 辨識完成！";
+                    document.getElementById("transcription").innerText = response.data.transcription || "無法辨識";
+                    document.getElementById("translation").innerText = response.data.translation || "翻譯失敗";
+                })
+                .catch(error => {
+                    document.getElementById("status").innerHTML = "😡 辨識失敗";
+                    console.error("API 錯誤:", error);
+                });
+        }
+    </script>
+</body>
+</html>
