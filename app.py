@@ -56,8 +56,6 @@ def upload_file():
         "translation": translated_text
     })
 
-import socket
-
 def find_available_port():
     """ 自動尋找可用的端口 """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -66,10 +64,10 @@ def find_available_port():
     s.close()
     return port
 
-import os
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # Render 需要 PORT 環境變數
+    print(f"🚀 Flask 伺服器正在運行： http://127.0.0.1:{port}")
     app.run(host="0.0.0.0", port=port)
 
 
