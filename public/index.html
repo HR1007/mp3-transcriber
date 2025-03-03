@@ -48,8 +48,8 @@
             document.getElementById("transcription").innerText = "";
             document.getElementById("translation").innerText = "";
     
-            axios.post("/upload", formData)
-                .then(response => {  
+            axios.post("https://mp3-transcriber.onrender.com/upload", formData)
+            .then(response => {  
                     console.log("API 回應:", response.data);  // 測試 API 是否有正確回應
                     document.getElementById("status").innerHTML = "🥳 辨識完成！";
                     document.getElementById("transcription").innerText = response.data.transcription || "無法辨識";
